@@ -1,0 +1,46 @@
+import pandas as pd
+
+tabela = pd.read_csv('notas_alunos.csv')
+
+dados = {
+    'alunos':[],
+    'notas_1':[],
+    'notas_2':[],
+    'falta':[],
+    'média':[],
+    'situação':[],
+}
+
+for aluno in range (len(tabela['aluno'])):
+    dados['alunos'].append((tabela['aluno'][aluno]))
+    dados['notas_1'].append((tabela['nota_1'][aluno]))
+    dados['notas_2'].append((tabela['nota_2'][aluno]))
+    dados['falta'].append((tabela['faltas'][aluno]))
+    dados['média'].append((tabela['nota_1'][aluno]+tabela['nota_2'][aluno])/2)
+    if tabela['faltas'][aluno]>5 or (tabela['nota_1'][aluno]+tabela['nota_2'][aluno])/2<7:
+        dados['situação'].append('REPROVADO')
+    else:
+        dados['situação'].append('APROVADO') 
+
+
+
+sitacaofinal = pd.DataFrame(dados)
+situacaofinal.to_csv('alunos_situacao.csv')
+
+
+countF = 0
+for f in dados['falta']:
+    if f > countF:
+        countF = f
+
+countM = 0
+geralM = 0
+count = 0
+for n in dados['média']:
+    geralM = geralM + n
+    count = count + 1
+    if n > countM:
+        countM = n
+geralM = geralM/count
+
+print('\n- O maior número de faltas:',countF,'\n- A média geral das notas dos alunos:',geralM,'\n- A maior média:',countM)
